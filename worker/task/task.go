@@ -3,6 +3,7 @@ package task
 import "time"
 
 type Itask interface {
+	CreateTask() (string, error)
 	SetTask() error
 	ContextLoad() error
 	HandleProcess() error
@@ -32,32 +33,46 @@ type TaskBase struct {
 	ModifyTime time.Time
 }
 
-func (t TaskBase) SetTask() error {
+func (t TaskBase) Base() *TaskBase {
+	return &t
+}
+
+// TODO:Need to support configurable initialization
+func NewTaskBase() *TaskBase {
+	return &TaskBase{}
+}
+
+func (t *TaskBase) CreateTask() (string, error) {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (t TaskBase) ContextLoad() error {
+func (t *TaskBase) SetTask() error {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (t TaskBase) HandleProcess() error {
+func (t *TaskBase) ContextLoad() error {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (t TaskBase) HandleFinish() {
+func (t *TaskBase) HandleProcess() error {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (t TaskBase) HandleFinishError() error {
+func (t *TaskBase) HandleFinish() {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (t TaskBase) HandleFailedMust() error {
+func (t *TaskBase) HandleFinishError() error {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (t *TaskBase) HandleFailedMust() error {
 	//TODO implement me
 	panic("implement me")
 }
