@@ -2,11 +2,6 @@ package model
 
 import "time"
 
-type RespBase struct {
-	Code int    `json:"code"`
-	Msg  string `json:"msg"`
-}
-
 type TaskData struct {
 	UserId           string    `json:"user_id"`
 	TaskId           string    `json:"task_id"`
