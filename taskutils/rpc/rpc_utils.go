@@ -8,7 +8,7 @@ func init() {
 	InitClient()
 }
 
-//InitClient func for Init client
+// InitClient func for Init client
 func InitClient() {
 	TaskClient = &http.Client{}
 }
