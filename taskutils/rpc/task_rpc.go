@@ -1,6 +1,9 @@
 package rpc
 
-import "github.com/wureny/TaskWave/taskutils/rpc/model"
+import (
+
+"github.com/wureny/TaskWave/taskutils/rpc/model"
+)
 
 type TaskRpc struct {
 	Host string
