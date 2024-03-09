@@ -33,8 +33,33 @@ type TaskBase struct {
 	ModifyTime time.Time
 }
 
-func (t TaskBase) Base() *TaskBase {
-	return &t
+// each type of task should register here
+var TaskHandlerMap = make(map[string]*TaskHandler, 0)
+
+func RegisterHandler(handler *TaskHandler) {
+	TaskHandlerMap[handler.TaskType] = handler
+}
+
+func GetHandler(taskType string) (*TaskHandler, int) {
+	if _, ok := TaskHandlerMap[taskType]; ok {
+		return TaskHandlerMap[taskType], 0
+	}
+	return nil, -1
+}
+
+func NewHandler(taskType string, newProc func() Itask) *TaskHandler {
+	return &TaskHandler{
+		TaskType: taskType,
+		NewProc:  newProc,
+	}
+}
+
+func (t *TaskBase) SetContextLocal(context interface{}) {
+	t.ContextIntf = context
+}
+
+func (t *TaskBase) Base() *TaskBase {
+	return t
 }
 
 // TODO:Need to support configurable initialization
@@ -87,4 +112,9 @@ type ScheduleData struct {
 	TraceId string
 	ErrMsg  string
 	Cost    string
+}
+
+type TaskHandler struct {
+	TaskType string
+	NewProc  func() Itask
 }
