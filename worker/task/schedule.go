@@ -7,6 +7,10 @@ import (
 
 var taskRpc rpc.TaskRpc
 
+var (
+	taskSvrHost string // new is host: for example http://127.0.0.1:41555
+)
+
 var scheduleCfgDict map[string]*model.TaskScheduleCfg
 
 func init() {

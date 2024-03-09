@@ -1,6 +1,11 @@
 package task
 
-import "time"
+import (
+	"github.com/wureny/TaskWave/taskutils/constant"
+	"github.com/wureny/TaskWave/taskutils/rpc"
+	"github.com/wureny/TaskWave/taskutils/rpc/model"
+	"time"
+)
 
 type Itask interface {
 	CreateTask() (string, error)
@@ -69,7 +74,26 @@ func NewTaskBase() *TaskBase {
 
 func (t *TaskBase) CreateTask() (string, error) {
 	//TODO implement me
-	panic("implement me")
+	var taskData model.TaskData
+	taskData.Status = t.Status
+	if taskData.Status == 0 {
+		taskData.Status = int64(constant.TASK_STATUS_PENDING)
+	}
+	taskData.TaskType = t.TaskType
+	taskData.TaskContext = t.TaskContext
+	taskData.UserId = t.UserId
+	taskData.MaxRetryNum = t.MaxRetryNum
+	taskData.MaxRetryInterval = t.MaxRetryInterval
+	var shortRpc = rpc.TaskRpc{
+		Host: taskSvrHost,
+	}
+	var createTaskReq = &model.CreateTaskReq{TaskData: taskData}
+	resp, err := shortRpc.CreateTask(createTaskReq)
+	if err != nil {
+		//TODO: log error
+		return "", err
+	}
+	return resp.TaskId, nil
 }
 
 func (t *TaskBase) SetTask() error {
