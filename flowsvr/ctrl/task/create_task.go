@@ -3,6 +3,7 @@ package task
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/wureny/TaskWave/flowsvr/constant"
+	"github.com/wureny/TaskWave/flowsvr/db"
 	"github.com/wureny/TaskWave/taskutils/rpc/model"
 	"net/http"
 )
@@ -14,8 +15,19 @@ type CreateTaskHandler struct {
 }
 
 func (c CreateTaskHandler) HandleInput() error {
-	//TODO implement me
-	panic("implement me")
+	if c.Req.TaskData.TaskType == "" {
+		//TODO: log error
+		c.Resq.Code = constant.ERR_INPUT_INVALID
+		return constant.ERR_HANDLE_INPUT
+	}
+	if c.Req.TaskData.Priority != nil {
+		if *c.Req.TaskData.Priority > db.MAX_PRIORITY || *c.Req.TaskData.Priority < 0 {
+			c.Resq.Code = constant.ERR_INPUT_INVALID
+			//TODO: log error
+			return constant.ERR_HANDLE_INPUT
+		}
+	}
+	return nil
 }
 
 func (c CreateTaskHandler) HandleProcess() error {
@@ -37,11 +49,7 @@ func CreateTask(c *gin.Context) {
 	}
 	err := cth.HandleInput()
 	if err != nil {
-		//TODO: log error
 		return
 	}
-	err = cth.HandleProcess()
-	if err != nil {
-		//TODO: log error
-	}
+	_ = cth.HandleProcess()
 }
